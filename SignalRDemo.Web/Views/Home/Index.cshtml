@@ -1,0 +1,58 @@
+﻿@using SignalRDemo.Web.Models
+@using SignalRDemo.Data
+
+@model IndexViewModel
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2 well">
+
+        <div class="col-md-9">
+            <input id="title" type="text" class="form-control" placeholder="Title">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-info btn-block" id="add-job">Submit</button>
+        </div>
+
+        <div style="margin-top: 30px" class="col-md-12">
+            <table id="my-table" class="table table-bordered table-hover table-striped">
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                </tr>
+
+                @foreach (Job j in Model.Jobs)
+                {
+                <tr data-id="@j.Id">
+                    <td>@j.Title</td>
+                    @if (j.Working == null)
+                    {
+                        <td><button id="@j.Id" class="btn btn-primary btn-block do">I'll do it!</button></td>
+                    }
+                    else 
+                    {
+                        if (j.Working.UserId == Model.CurrentUser.Id)
+                        {
+                            <td><button id="@j.Id" class="btn btn-success btn-block done">I'm done!</button></td>
+                        }
+                        else
+                        {
+                            <td><button  class="btn btn-warning btn-block">@j.Working.User.Name is doing it</button></td>
+                        }
+                    }
+                </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aspnet-signalr/1.1.4/signalr.min.js"></script>
+    <script src="~/js/Index.js"></script>
+}
